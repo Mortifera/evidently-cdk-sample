@@ -1,0 +1,14 @@
+{
+  "name": "evidently-cdk-sample",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "lerna run build",
+    "test": "lerna run test",
+    "lerna": "lerna"
+  },
+  "author": "",
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
