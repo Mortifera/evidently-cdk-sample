@@ -43,8 +43,7 @@ exports[`Stack Templates - EvidentlyCdkInfrastructureStack 1`] = `
                     \\"Statement\\": [
                         {
                             \\"Action\\": [
-                                \\"s3:PutObject*\\",
-                                \\"s3:GetObject*\\"
+                                \\"s3:*\\"
                             ],
                             \\"Effect\\": \\"Allow\\",
                             \\"Principal\\": {
@@ -66,7 +65,7 @@ exports[`Stack Templates - EvidentlyCdkInfrastructureStack 1`] = `
                             }
                         },
                         {
-                            \\"Action\\": \\"s3:ListBucket\\",
+                            \\"Action\\": \\"s3:*\\",
                             \\"Effect\\": \\"Allow\\",
                             \\"Principal\\": {
                                 \\"Service\\": \\"evidently.amazonaws.com\\"
