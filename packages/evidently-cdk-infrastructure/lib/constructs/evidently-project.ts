@@ -3,6 +3,7 @@ import { AwsCustomResource, AwsCustomResourcePolicy, PhysicalResourceId } from '
 import { Stack } from 'aws-cdk-lib';
 import { EvidentlyProjectCreateProjectProps, EvidentlyProjectDataDelivery, EvidentlyProjectDeleteProjectProps, EvidentlyProjectUpdateProjectProps } from './models';
 import { assert } from 'console';
+import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/lib/aws-iam';
 
 export interface EvidentlyProjectProps {
     name: string;
@@ -47,7 +48,7 @@ export class EvidentlyProject extends Construct {
 
         const physicalResourceId = PhysicalResourceId.of(`${id}-${props.name}`);
 
-        new AwsCustomResource(this, "ProjectCustomResource", {
+        const customResource = new AwsCustomResource(this, "ProjectCustomResource", {
             onCreate: {
                 service: 'Evidently',
                 action: 'createProject',
@@ -68,6 +69,20 @@ export class EvidentlyProject extends Construct {
             },
             policy: AwsCustomResourcePolicy.fromSdkCalls({ resources: [projectArn] })
         });
+
+        props.dataDelivery?.s3Destination?.bucket?.addToResourcePolicy(new PolicyStatement({
+            principals: [ new ServicePrincipal("evidently.amazonaws.com")],
+            actions: [
+                "s3:*",
+                "s3:*"
+            ],
+            resources: [ props.dataDelivery?.s3Destination?.bucket?.arnForObjects(props.dataDelivery?.s3Destination?.prefix + "*") ]
+        }));
+        props.dataDelivery?.s3Destination?.bucket?.addToResourcePolicy(new PolicyStatement({
+            principals: [ new ServicePrincipal("evidently.amazonaws.com")],
+            actions: [ "s3:*" ],
+            resources: [ props.dataDelivery?.s3Destination?.bucket?.bucketArn ]
+        }));
     }
 
     public getArn(): string {

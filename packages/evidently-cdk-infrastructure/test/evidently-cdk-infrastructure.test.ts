@@ -9,6 +9,6 @@ test('Stack Names', () => {
 
 synthedApp.stacks.forEach(stack => {
     test('Stack Templates - ' + stack.stackName, () => {
-        expect(stack.template).toMatchSnapshot();
+        expect(JSON.stringify(stack.template, undefined, 4)).toMatchSnapshot();
     });
 });
